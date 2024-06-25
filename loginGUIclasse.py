@@ -1,11 +1,8 @@
-
-
 import tkinter.messagebox as tkmb
 import firebase_admin
 from firebase_admin import credentials, firestore
 import customtkinter as ctk
-from gui import MainGUI
-from tkinter import Tk
+from home_page import MainGUI
 
 class LoginApp:
     def __init__(self):
@@ -42,7 +39,7 @@ class LoginApp:
         self.user_pass = ctk.CTkEntry(master=frame, placeholder_text="Password", show="*")
         self.user_pass.pack(pady=12, padx=10)
         
-        button = ctk.CTkButton(master=frame, text='Login',hover_color='green', command=self.login)
+        button = ctk.CTkButton(master=frame, text='Login', hover_color='green', command=self.login)
         button.pack(pady=12, padx=10)
         
         checkbox = ctk.CTkCheckBox(master=frame, text='Remember Me')
@@ -76,10 +73,13 @@ class LoginApp:
         else:
             tkmb.showwarning(title='Login Failed', message='Invalid username or password')
         self.progressbar.stop()
+
     def open_main_application(self):
-        self.app.withdraw()  # Hide the login window
-        main_app = MainGUI(self.app)
-        self.app.deiconify()  # Show the main application window
+        self.app.destroy()  # Close the login window
+        main_app = ctk.CTk()  # Create a new root window for the main application
+        MainGUI(main_app)
+        main_app.mainloop()
+
 
 if __name__ == "__main__":
     LoginApp()
