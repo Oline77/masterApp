@@ -2,7 +2,7 @@ import customtkinter as ctk
 from tkinter import PhotoImage
 from pathlib import Path
 from PIL import Image
-import openai
+from openai import OpenAI
 import firebase_admin
 from firebase_admin import credentials, firestore
 
@@ -36,7 +36,7 @@ class MainGUI:
         #frame menu 1
         self.frame3 = ctk.CTkFrame(master=self.frame, width=50,height=50, corner_radius=0, fg_color="#FFFFFF")
        
-        
+        self.frame4App = ctk.CTkFrame(master=self.frame, width=50,height=50, corner_radius=0, fg_color="#FFFFFF")
         
         # Welcome text
         self.welcome_label = ctk.CTkLabel(self.frame, text="Bienvenue", font=("Arial", 24, "bold"),bg_color="#265461", text_color="#FFFFFF")
@@ -60,13 +60,19 @@ class MainGUI:
         self.entry_api_key.place(x=280, y=70)
         
         
+        #Frame 4 App component
+        self.start_button = ctk.CTkButton(self.frame4App, text="Envoyer", command=self.send_prompt_action,font=("Arial", 16, "bold"), width=130, height=30, hover_color="green")
+        self.start_button.pack(pady=20)
+        self.start_button.place(x=370, y=400)
+        
+        
         
         #Menu button
         self.home_button = ctk.CTkButton(self.frame2, text="Home", command=self.home_menu_action,font=("Arial", 16, "bold"),  width=130, height=30)
         self.home_button.pack(pady=20)
         self.home_button.place(x=15, y=140)
         
-        self.menu2_button = ctk.CTkButton(self.frame2, text="App", command=None,font=("Arial", 16, "bold"),  width=130, height=30)
+        self.menu2_button = ctk.CTkButton(self.frame2, text="App", command=self.app_menu_action,font=("Arial", 16, "bold"),  width=130, height=30)
         self.menu2_button.pack(pady=20)
         self.menu2_button.place(x=15, y=190)
         
@@ -80,22 +86,42 @@ class MainGUI:
         self.logout_button.place(x=15, y=420)
         
     
-    def calcul_action(self):
-        print("Calcul button clicked")
-        api_key = 'your_api_key_here'
-        openai.api_key = api_key
+    def send_prompt_action(self):
+        #api_key = 'your_api_key_here'
+        #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
+        # Récupérer l'API key depuis Firebase
+        doc_ref = self.db.collection('api_keys').document('api_keys')
+        doc = doc_ref.get()
+        api_key_user = doc.get('api_key')
+        client = OpenAI(
+        # This is the default and can be omitted
+            api_key=api_key_user
+            )
 
-        # Ask a question to ChatGPT
-        response = openai.Completion.create(
-        engine="text-davinci-003",
-        prompt="What is the capital of France?",
-        max_tokens=100
+        chat_completion = client.chat.completions.create(
+            messages=[
+                {
+                    "role": "user",
+                    "content": "Say this is a test",
+                }
+            ],
+            model="babbage-002",
         )
 
         # Print the response
-        print(response.choices[0].text.strip())
+        print(chat_completion)
 
-    
+    def app_menu_action(self):
+        print("Home menu button clicked")
+        if self.frame3.winfo_exists():
+            self.frame3.place_forget()
+            self.frame3.pack_forget()
+        
+        self.frame4App.pack(fill="both", expand=True)
+        self.frame4App.place(x=160, y=0)
+        self.frame4App.place_configure(height="460px", width="700px")
+        
+            #self.frame3.destroy()
     def home_menu_action(self):
         print("Home menu button clicked")
         if self.frame3.winfo_exists():
@@ -104,6 +130,10 @@ class MainGUI:
             #self.frame3.destroy()
         
     def parametres_action(self):
+        if self.frame4App.winfo_exists():
+            self.frame4App.place_forget()
+            self.frame4App.pack_forget()
+            
         self.frame3.pack(fill="both", expand=True)
         self.frame3.place(x=160, y=0)
         self.frame3.place_configure(height="460px", width="700px")
@@ -115,7 +145,9 @@ class MainGUI:
         self.api_key_value = api_key
         print(self.api_key_value)
          # Send the API key to Firebase
-    
+        doc_ref = self.db.collection('api_keys').document('api_keys')
+        doc_ref.set({'api_key': api_key})
+        
                     
     def logout_action(self):
         self.root.destroy()  # Close the main application window
