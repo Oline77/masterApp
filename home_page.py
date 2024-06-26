@@ -61,7 +61,7 @@ class MainGUI:
         
         
         #Frame 4 App component
-        self.start_button = ctk.CTkButton(self.frame4App, text="Envoyer", command=self.send_prompt_action,font=("Arial", 16, "bold"), width=130, height=30, hover_color="green")
+        self.start_button = ctk.CTkButton(self.frame4App, text="ChatGPT", command=self.send_prompt_action,font=("Arial", 16, "bold"), width=130, height=30, hover_color="green")
         self.start_button.pack(pady=20)
         self.start_button.place(x=370, y=400)
         
