@@ -10,7 +10,7 @@ class MainGUI:
     def __init__(self, root):
         # Initialize Firebase
         self.cred = credentials.Certificate("tkinter-42267.json")
-        firebase_admin.initialize_app(self.cred)
+        #firebase_admin.initialize_app(self.cred)
         self.db = firestore.client()
         
         self.root = root
