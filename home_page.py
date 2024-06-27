@@ -1,16 +1,18 @@
 import customtkinter as ctk
 from tkinter import PhotoImage
 from pathlib import Path
-from PIL import Image
+from PIL import Image, ImageTk
 from openai import OpenAI
 import firebase_admin
 from firebase_admin import credentials, firestore
+from script.generateFacture import generate_invoice
+
 
 class MainGUI:
     def __init__(self, root):
         # Initialize Firebase
         self.cred = credentials.Certificate("tkinter-42267.json")
-        #firebase_admin.initialize_app(self.cred)
+        firebase_admin.initialize_app(self.cred)
         self.db = firestore.client()
         
         self.root = root
@@ -26,6 +28,21 @@ class MainGUI:
         self.frame = ctk.CTkFrame(self.root, corner_radius=0, fg_color="#FFFFFF")
         self.frame.pack(fill="both", expand=True)
         
+        self.explication_label = ctk.CTkLabel(self.frame, text="Bienvenue sur votre application de facturation", font=("Arial", 16, "bold"), text_color="black")
+        self.explication_label.pack(pady=20)
+        self.explication_label.place(x=200, y=10)
+        
+        self.home_label = ctk.CTkLabel(self.frame, text="Cette application va vous permettre de gérer simplement \nvos factures en tant que particulier.",font=("Arial", 13), text_color="black")
+        self.home_label.pack(pady=20)
+        self.home_label.place(x=220, y=50)
+        
+        #Image
+        self.home_image = Image.open("iconPDF.png")
+        self.home_image = ImageTk.PhotoImage(self.home_image)
+        #test
+        self.home_image_label = ctk.CTkLabel(self.frame, image=self.home_image)
+        self.home_image_label.pack(pady=20)
+        self.home_image_label.place(x=150, y=100)
         
         #Frame menu
         self.frame2 = ctk.CTkFrame(master=self.frame, width=200,height=200, corner_radius=0, fg_color="#265461")
@@ -128,6 +145,9 @@ class MainGUI:
             self.frame3.place_forget()
             self.frame3.pack_forget()
             #self.frame3.destroy()
+        if self.frame4App.winfo_exists():
+            self.frame4App.place_forget()
+            self.frame4App.pack_forget()
         
     def parametres_action(self):
         if self.frame4App.winfo_exists():
