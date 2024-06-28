@@ -187,7 +187,10 @@ class MainGUI:
     def logout_action(self):
         self.root.destroy()  # Close the main application window
     
-
+    def get_chantier_entry_value(self,event):
+        adresse = self.chantier_entry.get()
+        self.map_widget.set_address(adresse)
+        
     def localisation_chantier_action(self):
          # Hide other frames
         if self.frame3.winfo_exists():
@@ -201,12 +204,24 @@ class MainGUI:
         self.chantier_frame.pack(fill="both", expand=True)
         self.chantier_frame.place(x=160, y=0)
         self.chantier_frame.place_configure(height="460px", width="700px")
+        
+        self.chantier_label = ctk.CTkLabel(self.chantier_frame, text="Vos chantiers en cours", font=("Arial", 24, "bold"), text_color="black")
+        self.chantier_label.pack(pady=20)
+        self.chantier_label.place_configure(x=170, y=10)
+        
+        self.chantier_entry = ctk.CTkEntry(self.chantier_frame, placeholder_text="Entrer une adresse", width=300, height=30)
+        self.chantier_entry.pack(pady=20)
+        self.chantier_entry.place(x=110, y=45)
+        
+        # Bind the Return key to a function to get the value of todo_entry
+        self.chantier_entry.bind("<Return>", self.get_chantier_entry_value)
+        
         # create map widget
-        self.map_widget = tkintermapview.TkinterMapView(self.chantier_frame, width=600, height=480, corner_radius=15)
-        self.map_widget.place(x=40, y=70)
+        self.map_widget = tkintermapview.TkinterMapView(self.chantier_frame, width=600, height=450, corner_radius=15)
+        self.map_widget.place(x=40, y=100)
         # set current widget position and zoom
         self.map_widget.set_position(45.750000, 4.850000)  # Lyon, France
-        self.map_widget.set_zoom(15)
+        self.map_widget.set_zoom(13)
         def add_marker_event(coords):
             print("Add marker:", coords)
             new_marker = self.map_widget.set_marker(coords[0], coords[1], text="Chantier")
