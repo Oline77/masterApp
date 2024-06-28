@@ -108,7 +108,7 @@ class MainGUI:
         self.chantier_frame = ctk.CTkFrame(master=self.frame, width=50, height=50, corner_radius=0, fg_color="#FFFFFF")
         
         # Menu button
-        self.home_button = ctk.CTkButton(self.frame2, text="Acceuil", command=self.home_menu_action, font=("Arial", 16, "bold"),  width=130, height=30)
+        self.home_button = ctk.CTkButton(self.frame2, text="Accueil", command=self.home_menu_action, font=("Arial", 16, "bold"),  width=130, height=30)
         self.home_button.pack(pady=20)
         self.home_button.place(x=15, y=140)
         
