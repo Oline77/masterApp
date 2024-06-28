@@ -12,7 +12,7 @@ class MainGUI:
     def __init__(self, root):
         # Initialize Firebase
         self.cred = credentials.Certificate("tkinter-42267.json")
-        #firebase_admin.initialize_app(self.cred)
+        firebase_admin.initialize_app(self.cred)
         self.db = firestore.client()
         
         self.root = root
@@ -138,11 +138,8 @@ class MainGUI:
             model="babbage-002",
         )
 
-        # Print the response
-        print(chat_completion)
 
     def app_menu_action(self):
-        print("Home menu button clicked")
         if self.frame3.winfo_exists():
             self.frame3.place_forget()
             self.frame3.pack_forget()
@@ -153,7 +150,6 @@ class MainGUI:
         
             #self.frame3.destroy()
     def home_menu_action(self):
-        print("Home menu button clicked")
         if self.frame3.winfo_exists():
             self.frame3.place_forget()
             self.frame3.pack_forget()
@@ -170,12 +166,11 @@ class MainGUI:
         self.frame3.pack(fill="both", expand=True)
         self.frame3.place(x=160, y=0)
         self.frame3.place_configure(height="460px", width="700px")
-        print("Menu1 button clicked")
+        
         
     def sauvegarder_action(self):
         api_key = self.entry_api_key.get()
         self.api_key_value = api_key
-        print(self.api_key_value)
          # Send the API key to Firebase
         doc_ref = self.db.collection('api_keys').document('api_keys')
         doc_ref.set({'api_key': api_key})
