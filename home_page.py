@@ -6,6 +6,7 @@ from openai import OpenAI
 import firebase_admin
 from firebase_admin import credentials, firestore
 from script.generateFacture import generate_invoice
+import tkintermapview
 
 
 class MainGUI:
@@ -95,8 +96,16 @@ class MainGUI:
         self.button_carre3.place(x=350, y=30)
         self.button_carre3.place_configure(height="130px", width="130px")
         
+        self.button_carre4 = ctk.CTkButton(self.frame4App, text="Localisation \nchantier", command=self.localisation_chantier_action, font=("Arial", 16, "bold"), width=130, height=30, hover_color="white", corner_radius=15, fg_color="#BBE9FF", text_color="black")
+        self.button_carre4.pack(pady=20)
+        self.button_carre4.place(x=30, y=190)
+        self.button_carre4.place_configure(height="130px", width="130px")
+        
         # Frame for to-do list
         self.todo_frame = ctk.CTkFrame(master=self.frame, width=50, height=50, corner_radius=0, fg_color="#FFFFFF")
+        
+        # Frame for chantier
+        self.chantier_frame = ctk.CTkFrame(master=self.frame, width=50, height=50, corner_radius=0, fg_color="#FFFFFF")
         
         # Menu button
         self.home_button = ctk.CTkButton(self.frame2, text="Acceuil", command=self.home_menu_action, font=("Arial", 16, "bold"),  width=130, height=30)
@@ -178,6 +187,40 @@ class MainGUI:
     def logout_action(self):
         self.root.destroy()  # Close the main application window
     
+
+    def localisation_chantier_action(self):
+         # Hide other frames
+        if self.frame3.winfo_exists():
+            self.frame3.place_forget()
+            self.frame3.pack_forget()
+        if self.frame4App.winfo_exists():
+            self.frame4App.place_forget()
+            self.frame4App.pack_forget()
+        
+        # Show chantier_frame
+        self.chantier_frame.pack(fill="both", expand=True)
+        self.chantier_frame.place(x=160, y=0)
+        self.chantier_frame.place_configure(height="460px", width="700px")
+        # create map widget
+        self.map_widget = tkintermapview.TkinterMapView(self.chantier_frame, width=600, height=480, corner_radius=15)
+        self.map_widget.place(x=40, y=70)
+        # set current widget position and zoom
+        self.map_widget.set_position(45.750000, 4.850000)  # Lyon, France
+        self.map_widget.set_zoom(15)
+        def add_marker_event(coords):
+            print("Add marker:", coords)
+            new_marker = self.map_widget.set_marker(coords[0], coords[1], text="Chantier")
+            
+
+        self.map_widget.add_right_click_menu_command(label="Ajouter un chantier",
+                                                command=add_marker_event,
+                                                pass_coords=True)
+        
+         # Add a button to close the frame
+        self.close_todo_button = ctk.CTkButton(self.chantier_frame, text="x", command=self.close_chantier_frame, font=("Arial", 16, "bold"), width=13, height=13, fg_color="red", corner_radius=100)
+        self.close_todo_button.pack(pady=20)
+        self.close_todo_button.place(x=515, y=430)
+        
     def todo_list_action(self):
         # Hide other frames
         if self.frame3.winfo_exists():
@@ -259,6 +302,14 @@ class MainGUI:
         
         self.todo_list_frame.place_forget()
         self.todo_list_frame.pack_forget()
+        
+        self.frame4App.pack(fill="both", expand=True)
+        self.frame4App.place(x=160, y=0)
+        self.frame4App.place_configure(height="460px", width="700px")
+        
+    def close_chantier_frame(self):
+        self.chantier_frame.place_forget()
+        self.chantier_frame.pack_forget()
         
         self.frame4App.pack(fill="both", expand=True)
         self.frame4App.place(x=160, y=0)
