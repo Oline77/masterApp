@@ -8,6 +8,18 @@ from firebase_admin import credentials, firestore
 from script.generateFacture import generate_invoice
 import tkintermapview
 
+class Client:
+    def __init__(self, nom, prenom, adresse, email, numero, entreprise):
+        self.nom = nom
+        self.prenom = prenom
+        self.adresse = adresse
+        self.email = email
+        self.numero = numero
+        self.entreprise = entreprise
+
+    def __repr__(self):
+        return f"Client({self.nom}, {self.prenom}, {self.adresse}, {self.email}, {self.numero}, {self.entreprise})"
+
 
 class MainGUI:
     def __init__(self, root):
@@ -82,7 +94,7 @@ class MainGUI:
         self.button_carre1.place(x=30, y=30)
         self.button_carre1.place_configure(height="130px", width="130px")
         
-        self.button_carre2 = ctk.CTkButton(self.frame4App, text="Gérer \nclients", command=None, font=("Arial", 16, "bold"), width=130, height=30, hover_color="white", corner_radius=15, fg_color="#BBE9FF", text_color="black")
+        self.button_carre2 = ctk.CTkButton(self.frame4App, text="Gérer \nclients", command=self.gerer_clients_action, font=("Arial", 16, "bold"), width=130, height=30, hover_color="white", corner_radius=15, fg_color="#BBE9FF", text_color="black")
         self.button_carre2.pack(pady=20)
         self.button_carre2.place(x=190, y=30)
         self.button_carre2.place_configure(height="130px", width="130px")
@@ -160,6 +172,151 @@ class MainGUI:
         
     def logout_action(self):
         self.root.destroy()  # Close the main application window
+    
+    def gerer_clients_action(self):
+        # Hide other frames
+        if self.frame3.winfo_exists():
+            self.frame3.place_forget()
+            self.frame3.pack_forget()
+        if self.frame4App.winfo_exists():
+            self.frame4App.place_forget()
+            self.frame4App.pack_forget()
+        
+        # Show clients_frame
+        self.clients_frame = ctk.CTkFrame(master=self.frame, width=50, height=50, corner_radius=0, fg_color="#FFFFFF")
+        self.clients_frame.pack(fill="both", expand=True)
+        self.clients_frame.place(x=160, y=0)
+        self.clients_frame.place_configure(height="460px", width="700px")
+        
+        self.clients_label = ctk.CTkLabel(self.clients_frame, text="Gérer Clients", font=("Arial", 24, "bold"), text_color="black")
+        self.clients_label.pack(pady=20)
+        self.clients_label.place_configure(x=250, y=10)
+        
+        self.nom_label = ctk.CTkLabel(self.clients_frame, text="Nom :", text_color="black", font=("Arial", 14))
+        self.nom_label.pack(pady=20)
+        self.nom_label.place(x=150, y=70)
+        self.nom_entry = ctk.CTkEntry(self.clients_frame, placeholder_text="Nom", width=130, height=30)
+        self.nom_entry.pack(pady=20)
+        self.nom_entry.place(x=280, y=70)
+        
+        self.prenom_label = ctk.CTkLabel(self.clients_frame, text="Prénom :", text_color="black", font=("Arial", 14))
+        self.prenom_label.pack(pady=20)
+        self.prenom_label.place(x=150, y=110)
+        self.prenom_entry = ctk.CTkEntry(self.clients_frame, placeholder_text="Prénom", width=130, height=30)
+        self.prenom_entry.pack(pady=20)
+        self.prenom_entry.place(x=280, y=110)
+        
+        self.adresse_label = ctk.CTkLabel(self.clients_frame, text="Adresse :", text_color="black", font=("Arial", 14))
+        self.adresse_label.pack(pady=20)
+        self.adresse_label.place(x=150, y=150)
+        self.adresse_entry = ctk.CTkEntry(self.clients_frame, placeholder_text="Adresse", width=130, height=30)
+        self.adresse_entry.pack(pady=20)
+        self.adresse_entry.place(x=280, y=150)
+        
+        self.email_label = ctk.CTkLabel(self.clients_frame, text="Email :", text_color="black", font=("Arial", 14))
+        self.email_label.pack(pady=20)
+        self.email_label.place(x=150, y=190)
+        self.email_entry = ctk.CTkEntry(self.clients_frame, placeholder_text="Email", width=130, height=30)
+        self.email_entry.pack(pady=20)
+        self.email_entry.place(x=280, y=190)
+        
+        self.numero_label = ctk.CTkLabel(self.clients_frame, text="Numéro :", text_color="black", font=("Arial", 14))
+        self.numero_label.pack(pady=20)
+        self.numero_label.place(x=150, y=230)
+        self.numero_entry = ctk.CTkEntry(self.clients_frame, placeholder_text="Numéro", width=130, height=30)
+        self.numero_entry.pack(pady=20)
+        self.numero_entry.place(x=280, y=230)
+        
+        self.entreprise_label = ctk.CTkLabel(self.clients_frame, text="Entreprise :", text_color="black", font=("Arial", 14))
+        self.entreprise_label.pack(pady=20)
+        self.entreprise_label.place(x=150, y=270)
+        self.entreprise_entry = ctk.CTkEntry(self.clients_frame, placeholder_text="Entreprise", width=130, height=30)
+        self.entreprise_entry.pack(pady=20)
+        self.entreprise_entry.place(x=280, y=270)
+        
+        self.ajouter_client_button = ctk.CTkButton(self.clients_frame, text="Ajouter client", command=self.ajouter_client, font=("Arial", 16, "bold"), width=130, height=30, hover_color="green")
+        self.ajouter_client_button.pack(pady=20)
+        self.ajouter_client_button.place(x=320, y=310)
+        
+        # List frame
+        self.clients_list_frame = ctk.CTkFrame(self.clients_frame, width=500, height=150, fg_color="red")
+        self.clients_list_frame.pack(pady=20)
+        self.clients_list_frame.place(x=10, y=360)
+        
+        # Load existing clients
+        self.load_clients()
+        
+        # Add a button to close the frame
+        self.close_clients_button = ctk.CTkButton(self.clients_frame, text="Close", command=self.close_clients_frame, font=("Arial", 16, "bold"), width=90, height=30)
+        self.close_clients_button.pack(pady=20)
+        self.close_clients_button.place(x=400, y=400)
+    
+    def ajouter_client(self):
+        nom = self.nom_entry.get()
+        prenom = self.prenom_entry.get()
+        adresse = self.adresse_entry.get()
+        email = self.email_entry.get()
+        numero = self.numero_entry.get()
+        entreprise = self.entreprise_entry.get()
+        
+        if nom and prenom and adresse and email and numero and entreprise:
+            new_client = Client(nom, prenom, adresse, email, numero, entreprise)
+            self.clients.append(new_client)
+            self.save_client_to_firestore(new_client)
+            self.create_client_frame(new_client)
+            self.clear_client_entries()
+    
+    def save_client_to_firestore(self, client):
+        doc_ref = self.db.collection('clients').document()
+        doc_ref.set({
+            'nom': client.nom,
+            'prenom': client.prenom,
+            'adresse': client.adresse,
+            'email': client.email,
+            'numero': client.numero,
+            'entreprise': client.entreprise
+        })
+    
+    def load_clients(self):
+        # Load clients from Firestore
+        clients_ref = self.db.collection('clients').stream()
+        for client_doc in clients_ref:
+            client_data = client_doc.to_dict()
+            client = Client(client_data['nom'], client_data['prenom'], client_data['adresse'],
+                            client_data['email'], client_data['numero'], client_data['entreprise'])
+            self.clients.append(client)
+            self.create_client_frame(client)
+    
+    def create_client_frame(self, client):
+        client_frame = ctk.CTkFrame(self.clients_list_frame, fg_color="#E0E0E0", height=70)
+        client_frame.pack(fill="x", pady=2)
+        
+        client_info = f"{client.nom} {client.prenom} - {client.email} - {client.numero}"
+        
+        client_label = ctk.CTkLabel(client_frame, text=client_info, font=("Arial", 14), text_color="black", width=270)
+        client_label.pack(side="left", padx=10)
+        
+        delete_button = ctk.CTkButton(client_frame, text="Supprimer", command=lambda frm=client_frame, c=client: self.delete_client(frm, c), font=("Arial", 12, "bold"), width=80, height=30)
+        delete_button.pack(side="right", padx=5)
+    
+    def delete_client(self, client_frame, client):
+        client_frame.destroy()
+        self.clients = [c for c in self.clients if c != client]
+        self.delete_client_from_firestore(client)
+    
+    def delete_client_from_firestore(self, client):
+        # Delete client from Firestore
+        clients_ref = self.db.collection('clients').where('nom', '==', client.nom).where('prenom', '==', client.prenom).stream()
+        for client_doc in clients_ref:
+            client_doc.reference.delete()
+    
+    def clear_client_entries(self):
+        self.nom_entry.delete(0, 'end')
+        self.prenom_entry.delete(0, 'end')
+        self.adresse_entry.delete(0, 'end')
+        self.email_entry.delete(0, 'end')
+        self.numero_entry.delete(0, 'end')
+        self.entreprise_entry.delete(0, 'end')
     
     def get_chantier_entry_value(self,event):
         adresse = self.chantier_entry.get()
