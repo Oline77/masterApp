@@ -76,10 +76,6 @@ class MainGUI:
         self.entry_api_key.pack(pady=20)
         self.entry_api_key.place(x=280, y=70)
         
-        # Frame 4 App component
-        self.start_button = ctk.CTkButton(self.frame4App, text="ChatGPT", command=self.send_prompt_action, font=("Arial", 16, "bold"), width=130, height=30, hover_color="green")
-        self.start_button.pack(pady=20)
-        self.start_button.place(x=370, y=400)
         
         self.button_carre1 = ctk.CTkButton(self.frame4App, text="Génerer \nfacture", command=None, font=("Arial", 16, "bold"), width=130, height=30, hover_color="white", corner_radius=15, fg_color="#BBE9FF", text_color="black")
         self.button_carre1.pack(pady=20)
@@ -124,28 +120,6 @@ class MainGUI:
         self.logout_button = ctk.CTkButton(self.frame2, text="Logout", command=self.logout_action, font=("Arial", 16, "bold"), width=130, height=30, hover_color="red")
         self.logout_button.pack(pady=20)
         self.logout_button.place(x=15, y=420)
-    
-    def send_prompt_action(self):
-        #api_key = 'your_api_key_here'
-        #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
-        # Récupérer l'API key depuis Firebase
-        doc_ref = self.db.collection('api_keys').document('api_keys')
-        doc = doc_ref.get()
-        api_key_user = doc.get('api_key')
-        client = OpenAI(
-        # This is the default and can be omitted
-            api_key=api_key_user
-            )
-
-        chat_completion = client.chat.completions.create(
-            messages=[
-                {
-                    "role": "user",
-                    "content": "Say this is a test",
-                }
-            ],
-            model="babbage-002",
-        )
 
 
     def app_menu_action(self):
