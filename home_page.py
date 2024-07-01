@@ -36,7 +36,10 @@ class MainGUI:
         self.root.iconbitmap("images/earth.ico")
 
         self.todo_list = []
-         
+        self.clients = []
+        self.exit_image = Image.open("images/exit.ico")
+        self.exit_image = self.exit_image.resize((30, 30), Image.LANCZOS)  # Resize the image using LANCZOS filter
+        self.exit_image_tk = ImageTk.PhotoImage(self.exit_image)  # Convert to PhotoImage
         self.create_widgets()
 
     def create_widgets(self):
@@ -239,17 +242,28 @@ class MainGUI:
         self.ajouter_client_button.place(x=320, y=310)
         
         # List frame
-        self.clients_list_frame = ctk.CTkFrame(self.clients_frame, width=500, height=150, fg_color="red")
+        self.clients_list_frame = ctk.CTkFrame(self.clients_frame, width=500, height=150, fg_color="#FFFFFF")
         self.clients_list_frame.pack(pady=20)
         self.clients_list_frame.place(x=10, y=360)
         
         # Load existing clients
         self.load_clients()
-        
-        # Add a button to close the frame
-        self.close_clients_button = ctk.CTkButton(self.clients_frame, text="Close", command=self.close_clients_frame, font=("Arial", 16, "bold"), width=90, height=30)
+    
+        self.close_clients_button = ctk.CTkButton(self.clients_frame, image=self.exit_image_tk, command=self.close_clients_frame, width=13, height=13, fg_color="#FFFFFF", hover_color="#FFFFFF", corner_radius=100)
         self.close_clients_button.pack(pady=20)
-        self.close_clients_button.place(x=400, y=400)
+        self.close_clients_button.place(x=500, y=425)
+    def close_clients_frame(self):
+        
+        self.clients_frame.place_forget()
+        self.clients_frame.pack_forget()
+        
+        self.clients_list_frame.place_forget()
+        self.clients_list_frame.pack_forget()
+        
+        self.frame4App.pack(fill="both", expand=True)
+        self.frame4App.place(x=160, y=0)
+        self.frame4App.place_configure(height="460px", width="700px")
+        
     
     def ajouter_client(self):
         nom = self.nom_entry.get()
@@ -362,11 +376,10 @@ class MainGUI:
                                                 command=add_marker_event,
                                                 pass_coords=True)
         
-         # Add a button to close the frame
-        self.close_todo_button = ctk.CTkButton(self.chantier_frame, text="x", command=self.close_chantier_frame, font=("Arial", 16, "bold"), width=13, height=13, fg_color="red", corner_radius=100)
+         # Add a button to close the frame        
+        self.close_todo_button = ctk.CTkButton(self.chantier_frame, image=self.exit_image_tk, command=self.close_chantier_frame, width=13, height=13, fg_color="#FFFFFF", hover_color="#FFFFFF", corner_radius=100)
         self.close_todo_button.pack(pady=20)
-        self.close_todo_button.place(x=515, y=430)
-        
+        self.close_todo_button.place(x=500, y=425)
     def todo_list_action(self):
         # Hide other frames
         if self.frame3.winfo_exists():
@@ -403,9 +416,15 @@ class MainGUI:
             self.create_task_frame(item)
             
         # Add a button to close the frame
-        self.close_todo_button = ctk.CTkButton(self.todo_frame, text="Close", command=self.close_todo_frame, font=("Arial", 16, "bold"), width=90, height=30)
+        # self.close_todo_button = ctk.CTkButton(self.todo_frame, text="Close", command=self.close_todo_frame, font=("Arial", 16, "bold"), width=90, height=30)
+        # self.close_todo_button.pack(pady=20)
+        # self.close_todo_button.place(x=400, y=400)
+ 
+
+        # Create the button with the resized image
+        self.close_todo_button = ctk.CTkButton(self.todo_frame, image=self.exit_image_tk, command=self.close_todo_frame, width=13, height=13, fg_color="#FFFFFF", hover_color="#FFFFFF", corner_radius=100)
         self.close_todo_button.pack(pady=20)
-        self.close_todo_button.place(x=400, y=400)
+        self.close_todo_button.place(x=500, y=425)
         
     def get_todo_entry_value(self, event):
         task = self.todo_entry.get()
