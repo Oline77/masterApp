@@ -40,6 +40,9 @@ class MainGUI:
         self.exit_image = Image.open("images/exit.ico")
         self.exit_image = self.exit_image.resize((30, 30), Image.LANCZOS)  # Resize the image using LANCZOS filter
         self.exit_image_tk = ImageTk.PhotoImage(self.exit_image)  # Convert to PhotoImage
+        
+        self.entreprise_image = Image.open("images/entreprise.jpg")
+        self.entreprise_image_tk = ImageTk.PhotoImage(self.entreprise_image)
         self.create_widgets()
 
     def create_widgets(self):
@@ -54,7 +57,6 @@ class MainGUI:
         self.home_label = ctk.CTkLabel(self.frame, text="Cette application va vous permettre de gérer simplement \nvos votre entreprise",font=("Arial", 13), text_color="black")
         self.home_label.pack(pady=20)
         self.home_label.place(x=220, y=50)
-        
         # Image
         self.home_image = Image.open("images/iconPDF.png")
         self.home_image = ImageTk.PhotoImage(self.home_image)
@@ -174,8 +176,7 @@ class MainGUI:
         doc_ref.set({'api_key': api_key})
         
     def logout_action(self):
-        self.root.destroy()  # Close the main application window
-    
+        self.root.destroy()
     def gerer_clients_action(self):
         # Hide other frames
         if self.frame3.winfo_exists():
@@ -242,7 +243,9 @@ class MainGUI:
         self.ajouter_client_button.place(x=320, y=310)
         
         # List frame
-        self.clients_list_frame = ctk.CTkFrame(self.clients_frame, width=500, height=150, fg_color="#FFFFFF")
+        self.clients_list_frame = ctk.CTkScrollableFrame(self.clients_frame, width=460, height=150, fg_color="#FFFFFF", 
+                                                        scrollbar_fg_color="white",
+                                                        scrollbar_button_hover_color = "blue")
         self.clients_list_frame.pack(pady=20)
         self.clients_list_frame.place(x=10, y=360)
         
