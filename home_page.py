@@ -7,6 +7,8 @@ import firebase_admin
 from firebase_admin import credentials, firestore
 from script.generateFacture import generate_invoice
 import tkintermapview
+#pip install PyMuPDF
+from script.CtkPDFViewer import *
 
 class Client:
     def __init__(self, nom, prenom, adresse, email, numero, entreprise):
