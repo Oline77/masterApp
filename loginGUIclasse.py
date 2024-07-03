@@ -3,6 +3,8 @@ import firebase_admin
 from firebase_admin import credentials, firestore
 import customtkinter as ctk
 from home_page import MainGUI
+from PIL import Image, ImageTk
+from script.AnimatedGif import *
 
 class LoginApp:
     def __init__(self):
@@ -17,15 +19,28 @@ class LoginApp:
         
         # Initialize main application window
         self.app = ctk.CTk()
-        self.app.geometry("400x400")
+        self.app.geometry("400x480")
+        self.app.iconbitmap("images/earth.ico")
         self.app.resizable(width=False, height=False)
         self.app.title("Login")
         
         self.build_interface()
     
     def build_interface(self):
-        label = ctk.CTkLabel(self.app, text="Bienvenue, \nVeuillez vous connecter")
-        label.pack(pady=20)
+        bienvenue_gif = AnimatedGif(self.app, 'images/bienvenue.gif', 0.04)  # (tkinter.parent, filename, delay between frames)
+        bienvenue_gif.pack()
+        bienvenue_gif.configure(background="#242424")# Packing the label with the animated gif (grid works just as well)
+        bienvenue_gif.start()  # Shows gif at first frame and we are ready to go
+        
+        # label = ctk.CTkLabel(self.app, text="Veuillez vous connecter")
+        # label.pack(pady=20)
+        
+  
+        
+        lbl_with_my_gif = AnimatedGif(self.app, 'images/earth_small.gif', 0.04)  # (tkinter.parent, filename, delay between frames)
+        lbl_with_my_gif.pack()
+        lbl_with_my_gif.configure(background="#242424")# Packing the label with the animated gif (grid works just as well)
+        lbl_with_my_gif.start()  # Shows gif at first frame and we are ready to go
         
         frame = ctk.CTkFrame(master=self.app)
         frame.pack(pady=20, padx=40, fill='both', expand=True)
