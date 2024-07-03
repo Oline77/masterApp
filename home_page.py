@@ -1,5 +1,5 @@
 import customtkinter as ctk
-from tkinter import PhotoImage
+from tkinter import PhotoImage, StringVar
 from pathlib import Path
 from PIL import Image, ImageTk
 from openai import OpenAI
@@ -94,7 +94,7 @@ class MainGUI:
         self.entry_api_key.place(x=280, y=70)
         
         
-        self.button_carre1 = ctk.CTkButton(self.frame4App, text="Génerer \nfacture", command=None, font=("Arial", 16, "bold"), width=130, height=30, hover_color="white", corner_radius=15, fg_color="#BBE9FF", text_color="black")
+        self.button_carre1 = ctk.CTkButton(self.frame4App, text="Génerer \nfacture", command=self.generer_facture_action, font=("Arial", 16, "bold"), width=130, height=30, hover_color="white", corner_radius=15, fg_color="#BBE9FF", text_color="black")
         self.button_carre1.pack(pady=20)
         self.button_carre1.place(x=30, y=30)
         self.button_carre1.place_configure(height="130px", width="130px")
@@ -177,6 +177,184 @@ class MainGUI:
         
     def logout_action(self):
         self.root.destroy()
+        
+    def generer_facture_action(self):
+        if self.frame3.winfo_exists():
+            self.frame3.place_forget()
+            self.frame3.pack_forget()
+        if self.frame4App.winfo_exists():
+            self.frame4App.place_forget()
+            self.frame4App.pack_forget()
+        self.facture_frame = ctk.CTkFrame(master=self.frame, width=50, height=50, corner_radius=0, fg_color="#FFFFFF")
+        self.facture_frame.pack(fill="both", expand=True)
+        self.facture_frame.place(x=160, y=0)
+        self.facture_frame.place_configure(height="460px", width="700px")
+        
+        #Text 
+        self.facture_label = ctk.CTkLabel(self.facture_frame, text="Génerer une facture", font=("Arial", 24, "bold"), text_color="black")
+        self.facture_label.pack(pady=20)
+        self.facture_label.place_configure(x=200, y=1)
+        
+       # Numéro de facture
+        self.invoice_number = ctk.CTkLabel(self.facture_frame, text="Numéro de facture :", text_color="black", font=("Arial", 14))
+        self.invoice_number.pack(pady=20)
+        self.invoice_number.place(x=150, y=30)
+        self.invoice_number_entry = ctk.CTkEntry(self.facture_frame, placeholder_text="12345", width=130, height=30, border_color="#FFFFFF")
+        self.invoice_number_entry.pack(pady=20)
+        self.invoice_number_entry.place(x=280, y=30)
+
+        # Date de création
+        self.created_date = ctk.CTkLabel(self.facture_frame, text="Date de création :", text_color="black", font=("Arial", 14))
+        self.created_date.pack(pady=20)
+        self.created_date.place(x=150, y=70)
+        self.created_date_entry = ctk.CTkEntry(self.facture_frame, placeholder_text="01/01/2024", width=130, height=30, border_color="#FFFFFF")
+        self.created_date_entry.pack(pady=20)
+        self.created_date_entry.place(x=280, y=70)
+
+        # Date d'échéance
+        self.due_date = ctk.CTkLabel(self.facture_frame, text="Date d'échéance :", text_color="black", font=("Arial", 14))
+        self.due_date.pack(pady=20)
+        self.due_date.place(x=150, y=110)
+        self.due_date_entry = ctk.CTkEntry(self.facture_frame, placeholder_text="01/02/2024", width=130, height=30, border_color="#FFFFFF")
+        self.due_date_entry.pack(pady=20)
+        self.due_date_entry.place(x=280, y=110)
+
+        # Nom de l'entreprise
+        self.company_name = ctk.CTkLabel(self.facture_frame, text="Entreprise :", text_color="black", font=("Arial", 14))
+        self.company_name.pack(pady=20)
+        self.company_name.place(x=150, y=150)
+        self.company_name_entry = ctk.CTkEntry(self.facture_frame, placeholder_text="ABC Company", width=130, height=30, border_color="#FFFFFF")
+        self.company_name_entry.pack(pady=20)
+        self.company_name_entry.place(x=280, y=150)
+        
+        # Create ctkOptionMenu
+        #  # Fetch options from Firestore
+        # self.options = self.fetch_options_from_firestore()
+
+        # # Create ctkOptionMenu
+        # self.selected_option = StringVar() # Set default selection
+        # self.option_menu = ctk.CTkOptionMenu(self.root, options=self.options, selected_option=self.selected_option, width=200, height=30)
+        # self.option_menu.pack(pady=20)
+
+        # Adresse de l'entreprise
+        self.company_address = ctk.CTkLabel(self.facture_frame, text="Adresse :", text_color="black", font=("Arial", 14))
+        self.company_address.pack(pady=20)
+        self.company_address.place(x=150, y=190)
+        self.company_address_entry = ctk.CTkEntry(self.facture_frame, placeholder_text="123 Main Street, City, Country", width=130, height=30, border_color="#FFFFFF")
+        self.company_address_entry.pack(pady=20)
+        self.company_address_entry.place(x=280, y=190)
+
+        # Adresse mail de l'entreprise
+        self.company_email = ctk.CTkLabel(self.facture_frame, text="Adresse mail :", text_color="black", font=("Arial", 14))
+        self.company_email.pack(pady=20)
+        self.company_email.place(x=150, y=230)
+        self.company_email_entry = ctk.CTkEntry(self.facture_frame, placeholder_text="contact@abccompany.com", width=130, height=30, border_color="#FFFFFF")
+        self.company_email_entry.pack(pady=20)
+        self.company_email_entry.place(x=280, y=230)
+
+        # Nom du client
+        self.client_name = ctk.CTkLabel(self.facture_frame, text="Nom du client :", text_color="black", font=("Arial", 14))
+        self.client_name.pack(pady=20)
+        self.client_name.place(x=150, y=270)
+        self.client_name_entry = ctk.CTkEntry(self.facture_frame, placeholder_text="John Doe", width=130, height=30, border_color="#FFFFFF")
+        self.client_name_entry.pack(pady=20)
+        self.client_name_entry.place(x=280, y=270)
+
+        # Email du client
+        self.client_email = ctk.CTkLabel(self.facture_frame, text="Email du client :", text_color="black", font=("Arial", 14))
+        self.client_email.pack(pady=20)
+        self.client_email.place(x=150, y=310)
+        self.client_email_entry = ctk.CTkEntry(self.facture_frame, placeholder_text="john.doe@example.com", width=130, height=30, border_color="#FFFFFF")
+        self.client_email_entry.pack(pady=20)
+        self.client_email_entry.place(x=280, y=310)
+
+        # Articles
+        self.items_button = ctk.CTkButton(self.facture_frame, text="Ajouter un article", command=self.ajouter_article, font=("Arial", 16, "bold"), width=130, height=30, hover_color="green")
+        self.items_button.pack(pady=20)
+        self.items_button.place(x=150, y=350)
+
+        #Creer facture boutton 
+        self.generer_facture_button = ctk.CTkButton(self.facture_frame, text="Ma facture", command=self.creer_facture, font=("Arial", 16, "bold"), width=130, height=30, hover_color="green")
+        self.generer_facture_button.pack(pady=20)
+        self.generer_facture_button.place(x=300, y=395)
+        #Close button frame 
+        self.close_facture_button = ctk.CTkButton(self.facture_frame, image=self.exit_image_tk, command=self.close_facture_button, width=13, height=13, fg_color="#FFFFFF", hover_color="#FFFFFF", corner_radius=100)
+        self.close_facture_button.pack(pady=20)
+        self.close_facture_button.place(x=500, y=425)
+        
+    def fetch_options_from_firestore(self):
+        client_dispo =  []
+        clients_ref = self.db.collection('clients').stream()
+        for client_doc in clients_ref:
+            client_data = client_doc.to_dict()
+            client = Client(client_data['nom'], client_data['prenom'], client_data['adresse'],
+                            client_data['email'], client_data['numero'], client_data['entreprise'])
+            client_dispo.append(client)
+    
+    def ajouter_article(self):
+        # Crée une nouvelle fenêtre
+        article_window = ctk.CTkToplevel(self.root)
+        article_window.title("Ajouter un Article")
+          # Mettre la fenêtre au-dessus de la fenêtre principale
+        article_window.grab_set()
+        article_window.focus_force()
+
+        # Centrer la fenêtre sur l'écran
+        article_window.geometry("+%d+%d" % (self.root.winfo_x() + 50, self.root.winfo_y() + 50))
+
+        # Label et champ d'entrée pour le nom de l'article
+        article_label = ctk.CTkLabel(article_window, text="Article :", text_color="black", font=("Arial", 14))
+        article_label.pack(pady=10)
+        article_entry = ctk.CTkEntry(article_window, placeholder_text="Nom de l'article", width=200, height=30, border_color="#FFFFFF")
+        article_entry.pack(pady=10)
+        
+        # Label et champ d'entrée pour le prix de l'article
+        prix_label = ctk.CTkLabel(article_window, text="Prix :", text_color="black", font=("Arial", 14))
+        prix_label.pack(pady=10)
+        prix_entry = ctk.CTkEntry(article_window, placeholder_text="Prix de l'article", width=200, height=30, border_color="#FFFFFF")
+        prix_entry.pack(pady=10)
+        
+        # Liste pour stocker les articles
+        self.articles = []
+
+        # Fonction pour ajouter l'article à la liste
+        def ajouter():
+            article = article_entry.get()
+            prix = prix_entry.get()
+            self.articles.append((article, prix))
+            article_window.destroy()
+        
+        # Bouton pour valider l'ajout de l'article
+        ajouter_button = ctk.CTkButton(article_window, text="Ajouter", command=ajouter, font=("Arial", 14), width=100, height=30, hover_color="green")
+        ajouter_button.pack(pady=20)
+        
+    def creer_facture(self):
+        data = {            
+            "invoice_number": self.invoice_number_entry.get(),
+            "created_date": self.created_date_entry.get(),
+            "due_date": self.due_date_entry.get(),
+            "company_name": self.company_name_entry.get(),
+            "company_address": self.company_address_entry.get(),
+            "company_email": self.company_email_entry.get(),
+            "client_name": self.client_name_entry.get(),
+            "client_email": self.client_email_entry.get(),
+        } 
+        articles_data = []
+        for article, prix in self.articles:
+            articles_data.append((article, prix))
+        
+        # Ajouter les articles à la structure de données
+        data["items"] = articles_data
+        generate_invoice(data)
+    def close_facture_button(self):
+        
+        self.facture_frame.place_forget()
+        self.facture_frame.pack_forget()
+        
+        self.frame4App.pack(fill="both", expand=True)
+        self.frame4App.place(x=160, y=0)
+        self.frame4App.place_configure(height="460px", width="700px")
+        
     def gerer_clients_action(self):
         # Hide other frames
         if self.frame3.winfo_exists():
@@ -199,42 +377,42 @@ class MainGUI:
         self.nom_label = ctk.CTkLabel(self.clients_frame, text="Nom :", text_color="black", font=("Arial", 14))
         self.nom_label.pack(pady=20)
         self.nom_label.place(x=150, y=70)
-        self.nom_entry = ctk.CTkEntry(self.clients_frame, placeholder_text="Nom", width=130, height=30)
+        self.nom_entry = ctk.CTkEntry(self.clients_frame, placeholder_text="Nom", width=130, height=30, border_color="#FFFFFF")
         self.nom_entry.pack(pady=20)
         self.nom_entry.place(x=280, y=70)
         
         self.prenom_label = ctk.CTkLabel(self.clients_frame, text="Prénom :", text_color="black", font=("Arial", 14))
         self.prenom_label.pack(pady=20)
         self.prenom_label.place(x=150, y=110)
-        self.prenom_entry = ctk.CTkEntry(self.clients_frame, placeholder_text="Prénom", width=130, height=30)
+        self.prenom_entry = ctk.CTkEntry(self.clients_frame, placeholder_text="Prénom", width=130, height=30, border_color="#FFFFFF")
         self.prenom_entry.pack(pady=20)
         self.prenom_entry.place(x=280, y=110)
         
         self.adresse_label = ctk.CTkLabel(self.clients_frame, text="Adresse :", text_color="black", font=("Arial", 14))
         self.adresse_label.pack(pady=20)
         self.adresse_label.place(x=150, y=150)
-        self.adresse_entry = ctk.CTkEntry(self.clients_frame, placeholder_text="Adresse", width=130, height=30)
+        self.adresse_entry = ctk.CTkEntry(self.clients_frame, placeholder_text="Adresse", width=130, height=30, border_color="#FFFFFF")
         self.adresse_entry.pack(pady=20)
         self.adresse_entry.place(x=280, y=150)
         
         self.email_label = ctk.CTkLabel(self.clients_frame, text="Email :", text_color="black", font=("Arial", 14))
         self.email_label.pack(pady=20)
         self.email_label.place(x=150, y=190)
-        self.email_entry = ctk.CTkEntry(self.clients_frame, placeholder_text="Email", width=130, height=30)
+        self.email_entry = ctk.CTkEntry(self.clients_frame, placeholder_text="Email", width=130, height=30, border_color="#FFFFFF")
         self.email_entry.pack(pady=20)
         self.email_entry.place(x=280, y=190)
         
         self.numero_label = ctk.CTkLabel(self.clients_frame, text="Numéro :", text_color="black", font=("Arial", 14))
         self.numero_label.pack(pady=20)
         self.numero_label.place(x=150, y=230)
-        self.numero_entry = ctk.CTkEntry(self.clients_frame, placeholder_text="Numéro", width=130, height=30)
+        self.numero_entry = ctk.CTkEntry(self.clients_frame, placeholder_text="Numéro", width=130, height=30, border_color="#FFFFFF")
         self.numero_entry.pack(pady=20)
         self.numero_entry.place(x=280, y=230)
         
         self.entreprise_label = ctk.CTkLabel(self.clients_frame, text="Entreprise :", text_color="black", font=("Arial", 14))
         self.entreprise_label.pack(pady=20)
         self.entreprise_label.place(x=150, y=270)
-        self.entreprise_entry = ctk.CTkEntry(self.clients_frame, placeholder_text="Entreprise", width=130, height=30)
+        self.entreprise_entry = ctk.CTkEntry(self.clients_frame, placeholder_text="Entreprise", width=130, height=30, border_color="#FFFFFF")
         self.entreprise_entry.pack(pady=20)
         self.entreprise_entry.place(x=280, y=270)
         

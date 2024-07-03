@@ -43,13 +43,12 @@ def generate_invoice(data):
     # Conteneur pour les éléments de la facture
     elements = []
 
-    # Logo
+    # # Logo
     # try:
-    #     logo_path = "logo.jpg"
+    #     logo_path = "../images/earth.ico"
     #     logo = Image(logo_path, width=2*inch, height=2*inch)
     #     elements.append(logo)
     # except FileNotFoundError:
-    #     Handle the exception, for example:
     #     elements.append(Paragraph("Logo Not Found", styles['Normal']))
     
     # Informations de l'entreprise et du client
