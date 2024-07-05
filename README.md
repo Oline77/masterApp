@@ -1,8 +1,10 @@
 # masterApp
 **Cyber Garde Is Watching You**
 
-Welcome to your desktop app. You can find different fonctionnalities : Generate invoice, Manage your customers, ...
+Welcome to your desktop app. 
+You can find different functionalities: Generate invoices, Manage your customers, ... 
 The login part is using Firebase. Most of the data like the clients you add are stocked in Firebase.
+
 ## Login :
 ![image](https://github.com/Oline77/masterApp/assets/64975800/88fa00e4-6b4c-446b-8ab9-ce7b259ef7af)
 
