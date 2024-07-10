@@ -1,7 +1,7 @@
 # masterApp
 ### Réalisé avec customTkinter et Firebase
 masterApp est un projet d'application de gestion d'entreprise.
-Vous y trouverez différentes fonctionnalités : 
+Vous y trouverez différentes fonctionnalitées : 
 - Générer des factures 
 - Gérer vos clients (création/suppression)
 - Gérer les tâches que vous avez à faire avec une todo list
