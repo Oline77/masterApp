@@ -1,9 +1,13 @@
 # masterApp
-**Cyber Garde Is Watching You**
 
-Welcome to your desktop app. 
-You can find different functionalities: Generate invoices, Manage your customers, ... 
-The login part is using Firebase. Most of the data like the clients you add are stocked in Firebase.
+masterApp est un projet d'application de gestion d'entreprise.
+Vous y trouverez différentes fonctionnalités : 
+- Générer des factures 
+- Gérer vos clients (création/suppression)
+- Gérer les tâches que vous avez à faire avec une todo list
+- Gérer vos chantier 
+La partie connexion utilise Firebase.
+La plupart des données comme les clients que vous ajoutez sont stockées dans Firebase.
 
 ## Login :
 ![image](https://github.com/Oline77/masterApp/assets/64975800/88fa00e4-6b4c-446b-8ab9-ce7b259ef7af)
