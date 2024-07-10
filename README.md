@@ -8,7 +8,7 @@ Vous y trouverez différentes fonctionnalitées :
 - Gérer vos chantier 
 La partie connexion utilise Firebase.
 La plupart des données comme les clients que vous ajoutez sont stockées dans Firebase.
-
+#### Mettre à jour le fichier .json avec vos informations firebase
 ## Login :
 ![image](https://github.com/Oline77/masterApp/assets/64975800/88fa00e4-6b4c-446b-8ab9-ce7b259ef7af)
 
